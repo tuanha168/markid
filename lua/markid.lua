@@ -103,7 +103,11 @@ function M.init()
                 parser:register_cbs(
                     {
                         on_changedtree = function(changes, tree)
-                            highlight_tree(tree:root(), 0, -1) -- can be made more efficient, but for plain identifier changes, `changes` is empty
+                            vim.schedule(function ()
+                                if vim.api.nvim_buf_is_valid(bufnr) then
+                                    highlight_tree(tree:root(), 0, -1) -- can be made more efficient, but for plain identifier changes, `changes` is empty
+                                end
+                            end)
                         end
                     }
                 )
